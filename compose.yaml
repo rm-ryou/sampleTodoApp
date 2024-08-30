@@ -1,0 +1,6 @@
+services:
+  api:
+    build:
+      context: ./docker/go
+      target: production
+    tty: true
