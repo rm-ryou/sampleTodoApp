@@ -3,4 +3,6 @@ services:
     build:
       context: ./docker/go
       target: production
+    environment:
+      - PORT=${API_PORT:-3100}
     tty: true
