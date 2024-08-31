@@ -21,15 +21,15 @@ var UserTestData = []entity.User{
 
 var UserResponseTestData = []entity.UserResponse{
 	{
-		ID:       1,
-		Name:     "admin",
-		Email:    "admin@example.com",
-		Admin:    true,
+		ID:    1,
+		Name:  "admin",
+		Email: "admin@example.com",
+		Admin: true,
 	},
 	{
-		ID:       2,
-		Name:     "user01",
-		Email:    "user01@example.com",
-		Admin:    false,
+		ID:    2,
+		Name:  "user01",
+		Email: "user01@example.com",
+		Admin: false,
 	},
 }

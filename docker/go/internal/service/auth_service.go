@@ -3,15 +3,15 @@ package service
 import "github.com/rm-ryou/sampleTodoApp/internal/entity"
 
 type AuthServicer interface {
-	SignIn(email, password string) (*entity.UserResponse, error)
+	SignIn(email, password string, isAdminResource bool) (*entity.UserResponse, error)
 }
 
-type AuthService struct {}
+type AuthService struct{}
 
 func NewAuthService() *AuthService {
 	return &AuthService{}
 }
 
-func (as *AuthService) SignIn(email, password string) (*entity.UserResponse, error) {
+func (as *AuthService) SignIn(email, password string, isAdminResource bool) (*entity.UserResponse, error) {
 	return nil, nil
 }

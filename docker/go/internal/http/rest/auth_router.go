@@ -8,18 +8,19 @@ import (
 )
 
 type SignInParam struct {
-	Email string `json:"email" binding:"required"`
+	Email    string `json:"email" binding:"required"`
 	Password string `json:"password" binding:"required"`
 }
 
 func BindAuthRoutes(r *gin.Engine, as service.AuthServicer) {
 	authRouter := r.Group("/api/v1/auth")
 
-	usersSignIn(authRouter, as)
+	authRouter.POST("/users/sign_in", signInHandler(as, false))
+	authRouter.POST("/admins/sign_in", signInHandler(as, true))
 }
 
-func usersSignIn(r *gin.RouterGroup, as service.AuthServicer) {
-	signInHandler := func(c *gin.Context) {
+func signInHandler(as service.AuthServicer, isAdminResource bool) func(c *gin.Context) {
+	return func(c *gin.Context) {
 		var req SignInParam
 
 		if err := c.ShouldBindJSON(&req); err != nil {
@@ -27,7 +28,7 @@ func usersSignIn(r *gin.RouterGroup, as service.AuthServicer) {
 			return
 		}
 
-		res, err := as.SignIn(req.Email, req.Password)
+		res, err := as.SignIn(req.Email, req.Password, isAdminResource)
 		if err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{"msg": err.Error()})
 			return
@@ -35,5 +36,4 @@ func usersSignIn(r *gin.RouterGroup, as service.AuthServicer) {
 
 		c.JSON(http.StatusOK, gin.H{"data": res})
 	}
-	r.POST("/users/sign_in", signInHandler)
 }

@@ -13,8 +13,8 @@ type User struct {
 }
 
 type UserResponse struct {
-	ID        int       `json:"id"`
-	Name      string    `json:"name"`
-	Email     string    `json:"email"`
-	Admin     bool      `json:"admin"`
+	ID    int    `json:"id"`
+	Name  string `json:"name"`
+	Email string `json:"email"`
+	Admin bool   `json:"admin"`
 }
