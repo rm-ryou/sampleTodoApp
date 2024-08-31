@@ -13,6 +13,10 @@ func NewAuthServiceMock() *authServiceMock {
 	return &authServiceMock{}
 }
 
+func (asm *authServiceMock) SignUp(name, email, password string) (*entity.UserResponse, error) {
+	return &testdata.UserResponseTestData[1], nil
+}
+
 func (asm *authServiceMock) SignIn(email, password string, isAdminResource bool) (*entity.UserResponse, error) {
 	user, err := getUserByEmail(email)
 	if err != nil {

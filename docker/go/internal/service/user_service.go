@@ -3,7 +3,6 @@ package service
 import "github.com/rm-ryou/sampleTodoApp/internal/entity"
 
 type UserServicer interface {
-	CreateUser(name, email, password string) (*entity.UserResponse, error)
 	GetUser(id int) (*entity.UserResponse, error)
 	GetUsers() ([]entity.UserResponse, error)
 	EditUser(id int, name, email, password string) (*entity.UserResponse, error)
@@ -14,10 +13,6 @@ type UserService struct{}
 
 func NewUserService() *UserService {
 	return &UserService{}
-}
-
-func (us *UserService) CreateUser(name, email, password string) (*entity.UserResponse, error) {
-	return nil, nil
 }
 
 func (us *UserService) GetUser(id int) (*entity.UserResponse, error) {
