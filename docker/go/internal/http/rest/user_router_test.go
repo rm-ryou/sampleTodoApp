@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/http/httptest"
+	"strings"
 	"testing"
 
 	"github.com/rm-ryou/sampleTodoApp/internal/entity"
@@ -67,4 +68,40 @@ func TestGetUsers(t *testing.T) {
 	assert.Equal(t, 1, len(users))
 	assert.Equal(t, testdata.UserTestData[1].ID, users[0].ID)
 	assert.Equal(t, http.StatusOK, res.Code)
+}
+
+func TestEditUser(t *testing.T) {
+	t.Run("update user name", func(t *testing.T) {
+		subjectUser := testdata.UserTestData[1]
+
+		updateName := "Update Name"
+		reqDataStr := fmt.Sprintf(`{"name":"%s"}`, updateName)
+
+		reqData := strings.NewReader(reqDataStr)
+		url := fmt.Sprintf("%s/api/v1/users/%d", baseURL, subjectUser.ID)
+		res := httptest.NewRecorder()
+		req := httptest.NewRequest(http.MethodPatch, url, reqData)
+
+		router.ServeHTTP(res, req)
+
+		var userResponse UserResponse[entity.User]
+		if err := json.Unmarshal(res.Body.Bytes(), &userResponse); err != nil {
+			t.Error(err)
+		}
+		user := userResponse.Data
+
+		assert.Equal(t, updateName, user.Name)
+		assert.Equal(t, subjectUser.Email, user.Email)
+		assert.Equal(t, http.StatusOK, res.Code)
+	})
+
+	t.Run("parameter is not number", func(t *testing.T) {
+		url := fmt.Sprintf("%s/api/v1/users/hoge", baseURL)
+		res := httptest.NewRecorder()
+		req := httptest.NewRequest(http.MethodPatch, url, nil)
+
+		router.ServeHTTP(res, req)
+
+		assert.Equal(t, http.StatusBadRequest, res.Code)
+	})
 }
