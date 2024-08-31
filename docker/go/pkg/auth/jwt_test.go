@@ -46,3 +46,41 @@ func TestGenerateToken(t *testing.T) {
 	assert.Equal(t, user.ID, claims.UserID)
 	assert.Equal(t, expectedTime, claims.ExpiresAt)
 }
+
+func TestVerifyToken(t *testing.T) {
+	user := testdata.UserTestData[1]
+	t.Run("valid token", func(t *testing.T) {
+		token, err := GenerateToken(user.ID, utils.RealTime{})
+		if err != nil {
+			t.Error(err)
+		}
+
+		claims, err := VerifyToken(token)
+
+		assert.Nil(t, err)
+		assert.Equal(t, claims.UserID, user.ID)
+	})
+
+	t.Run("Invalid token", func(t *testing.T) {
+		token := "hoge"
+
+		claims, err := VerifyToken(token)
+
+		assert.NotNil(t, err)
+		assert.Nil(t, claims)
+	})
+
+	t.Run("Expired token", func(t *testing.T) {
+		baseTime := time.Date(2000, 1, 1, 0, 0, 0, 0, time.UTC)
+		mt := utils.NewMockTime(baseTime)
+		token, err := GenerateToken(user.ID, mt)
+		if err != nil {
+			t.Error(err)
+		}
+
+		claims, err := VerifyToken(token)
+
+		assert.NotNil(t, err)
+		assert.Nil(t, claims)
+	})
+}
