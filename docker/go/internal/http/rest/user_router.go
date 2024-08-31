@@ -36,7 +36,11 @@ func createUser(r *gin.RouterGroup, us service.UserServicer) {
 			return
 		}
 
-		user := us.CreateUser(req.Name, req.Email, req.Password)
+		user, err := us.CreateUser(req.Name, req.Email, req.Password)
+		if err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"msg": err.Error()})
+		}
+
 		c.JSON(http.StatusOK, gin.H{"data": user})
 	}
 	r.POST("", createUserHandler)
@@ -51,7 +55,11 @@ func getUser(r *gin.RouterGroup, us service.UserServicer) {
 			return
 		}
 
-		user := us.GetUser(req.ID)
+		user, err := us.GetUser(req.ID)
+		if err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"msg": err.Error()})
+		}
+
 		c.JSON(http.StatusOK, gin.H{"data": user})
 	}
 	r.GET("/:id", getUserHandler)
@@ -59,7 +67,11 @@ func getUser(r *gin.RouterGroup, us service.UserServicer) {
 
 func getUsers(r *gin.RouterGroup, us service.UserServicer) {
 	getUsersHandler := func(c *gin.Context) {
-		users := us.GetUsers()
+		users, err := us.GetUsers()
+		if err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"msg": err.Error()})
+		}
+
 		c.JSON(http.StatusOK, gin.H{"data": users})
 	}
 	r.GET("", getUsersHandler)
@@ -80,7 +92,11 @@ func editUser(r *gin.RouterGroup, us service.UserServicer) {
 			return
 		}
 
-		user := us.EditUser(reqId.ID, reqBody.Name, reqBody.Email, reqBody.Password)
+		user, err := us.EditUser(reqId.ID, reqBody.Name, reqBody.Email, reqBody.Password)
+		if err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"msg": err.Error()})
+		}
+
 		c.JSON(http.StatusOK, gin.H{"data": user})
 	}
 	r.PATCH("/:id", editUserHandler)

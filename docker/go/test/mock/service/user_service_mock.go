@@ -11,19 +11,19 @@ func NewUserServiceMock() *userServiceMock {
 	return &userServiceMock{}
 }
 
-func (usm *userServiceMock) CreateUser(name, email, password string) *entity.User {
-	return &testdata.UserTestData[1]
+func (usm *userServiceMock) CreateUser(name, email, password string) (*entity.User, error) {
+	return &testdata.UserTestData[1], nil
 }
 
-func (usm *userServiceMock) GetUser(id int) *entity.User {
-	return &testdata.UserTestData[1]
+func (usm *userServiceMock) GetUser(id int) (*entity.User, error) {
+	return &testdata.UserTestData[1], nil
 }
 
-func (usm *userServiceMock) GetUsers() []entity.User {
-	return testdata.UserTestData[1:]
+func (usm *userServiceMock) GetUsers() ([]entity.User, error) {
+	return testdata.UserTestData[1:], nil
 }
 
-func (usm *userServiceMock) EditUser(id int, name, email, password string) *entity.User {
+func (usm *userServiceMock) EditUser(id int, name, email, password string) (*entity.User, error) {
 	baseUser := testdata.UserTestData[1]
 
 	if name != "" {
@@ -36,7 +36,7 @@ func (usm *userServiceMock) EditUser(id int, name, email, password string) *enti
 		baseUser.Password = password
 	}
 
-	return &baseUser
+	return &baseUser, nil
 }
 
 func (usm *userServiceMock) DeleteUser(id int) error {

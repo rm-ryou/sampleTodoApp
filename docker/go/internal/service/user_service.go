@@ -3,10 +3,10 @@ package service
 import "github.com/rm-ryou/sampleTodoApp/internal/entity"
 
 type UserServicer interface {
-	CreateUser(name, email, password string) *entity.User
-	GetUser(id int) *entity.User
-	GetUsers() []entity.User
-	EditUser(id int, name, email, password string) *entity.User
+	CreateUser(name, email, password string) (*entity.User, error)
+	GetUser(id int) (*entity.User, error)
+	GetUsers() ([]entity.User, error)
+	EditUser(id int, name, email, password string) (*entity.User, error)
 	DeleteUser(id int) error
 }
 
@@ -16,20 +16,20 @@ func NewUserService() *UserService {
 	return &UserService{}
 }
 
-func (us *UserService) CreateUser(name, email, password string) *entity.User {
-	return nil
+func (us *UserService) CreateUser(name, email, password string) (*entity.User, error) {
+	return nil, nil
 }
 
-func (us *UserService) GetUser(id int) *entity.User {
-	return nil
+func (us *UserService) GetUser(id int) (*entity.User, error) {
+	return nil, nil
 }
 
-func (us *UserService) GetUsers() []entity.User {
-	return nil
+func (us *UserService) GetUsers() ([]entity.User, error) {
+	return nil, nil
 }
 
-func (us *UserService) EditUser(id int, name, email, password string) *entity.User {
-	return nil
+func (us *UserService) EditUser(id int, name, email, password string) (*entity.User, error) {
+	return nil, nil
 }
 
 func (us *UserService) DeleteUser(id int) error {
