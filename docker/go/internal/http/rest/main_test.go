@@ -20,7 +20,9 @@ func TestMain(m *testing.M) {
 	router = NewRouter()
 
 	userService := service_mock.NewUserServiceMock()
+	authService := service_mock.NewAuthServiceMock()
 	BindUserRoutes(router, userService)
+	BindAuthRoutes(router, authService)
 
 	m.Run()
 }

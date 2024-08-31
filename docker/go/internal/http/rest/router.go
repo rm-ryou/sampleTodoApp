@@ -14,6 +14,8 @@ func NewRouter() *gin.Engine {
 
 func BindRoutes(r *gin.Engine) {
 	us := service.NewUserService()
+	as := service.NewAuthService()
 
 	BindUserRoutes(r, us)
+	BindAuthRoutes(r, as)
 }

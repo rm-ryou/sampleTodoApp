@@ -7,14 +7,29 @@ var UserTestData = []entity.User{
 		ID:       1,
 		Name:     "admin",
 		Email:    "admin@example.com",
-		Password: "$2a$10$evMrGNMf75Yn.C6cplFLie48l3Q6jvvds2ym.ZBJVDlY5rVctA2Qy",
+		Password: "admin",
 		Admin:    true,
 	},
 	{
 		ID:       2,
 		Name:     "user01",
 		Email:    "user01@example.com",
-		Password: "$2a$10$PYQHWYmxga719jfyqYxWZ.NjdfCo9StyDEdLmemEVjT6sNHGmZlJS",
+		Password: "password",
 		Admin:    false,
+	},
+}
+
+var UserResponseTestData = []entity.UserResponse{
+	{
+		ID:    1,
+		Name:  "admin",
+		Email: "admin@example.com",
+		Admin: true,
+	},
+	{
+		ID:    2,
+		Name:  "user01",
+		Email: "user01@example.com",
+		Admin: false,
 	},
 }
