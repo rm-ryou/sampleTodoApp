@@ -24,6 +24,7 @@ func BindUserRoutes(r *gin.Engine, us service.UserServicer) {
 	getUser(userRouter, us)
 	getUsers(userRouter, us)
 	editUser(userRouter, us)
+	deleteUser(userRouter, us)
 }
 
 func createUser(r *gin.RouterGroup, us service.UserServicer) {
@@ -83,4 +84,22 @@ func editUser(r *gin.RouterGroup, us service.UserServicer) {
 		c.JSON(http.StatusOK, gin.H{"data": user})
 	}
 	r.PATCH("/:id", editUserHandler)
+}
+
+func deleteUser(r *gin.RouterGroup, us service.UserServicer) {
+	deleteUserHandler := func(c *gin.Context) {
+		var reqId UserRequestParam
+
+		if err := c.ShouldBindUri(&reqId); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"msg": err.Error()})
+			return
+		}
+
+		if err := us.DeleteUser(reqId.ID); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"msg": err.Error()})
+			return
+		}
+		c.JSON(http.StatusOK, gin.H{"msg": "success"})
+	}
+	r.DELETE("/:id", deleteUserHandler)
 }

@@ -128,3 +128,26 @@ func TestEditUser(t *testing.T) {
 		assert.Equal(t, http.StatusBadRequest, res.Code)
 	})
 }
+
+func TestDeleteUser(t *testing.T) {
+	tests := []struct {
+		title      string
+		param      string
+		statusCode int
+	}{
+		{title: "parameter is valid", param: "1", statusCode: http.StatusOK},
+		{title: "parameter is not valid", param: "hoge", statusCode: http.StatusBadRequest},
+	}
+
+	for _, test := range tests {
+		t.Run(test.title, func(t *testing.T) {
+			url := fmt.Sprintf("%s/api/v1/users/%s", baseURL, test.param)
+			res := httptest.NewRecorder()
+			req := httptest.NewRequest(http.MethodDelete, url, nil)
+
+			router.ServeHTTP(res, req)
+
+			assert.Equal(t, test.statusCode, res.Code)
+		})
+	}
+}
