@@ -6,14 +6,18 @@ WORKDIR /app
 COPY . .
 RUN go mod download
 
-RUN CGO_ENABLED=0 GOOS=linux go build -o /app/main
+RUN CGO_ENABLED=0 GOOS=linux go build -C cmd/sampleTodoApp -v -o /app/main
 
 ###----- Production -----###
 FROM debian:bookworm-slim AS production
 
 WORKDIR /app
 
-COPY --from=builder /app/main /app/main
+ENV GIN_MODE=release
 
-CMD ["/app/main"]
+COPY --from=builder /app/main /app/server
+
+EXPOSE ${PORT}
+
+CMD ["/app/server"]
 
