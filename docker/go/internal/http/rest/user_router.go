@@ -7,11 +7,11 @@ import (
 	"github.com/rm-ryou/sampleTodoApp/internal/service"
 )
 
-type GetUserRequest struct {
+type UserRequestParam struct {
 	ID int `uri:"id" binding:"required"`
 }
 
-type EditUserRequest struct {
+type UserRequestBody struct {
 	Name     string `json:"name"`
 	Email    string `json:"email"`
 	Password string `json:"password"`
@@ -20,14 +20,30 @@ type EditUserRequest struct {
 func BindUserRoutes(r *gin.Engine, us service.UserServicer) {
 	userRouter := r.Group("/api/v1/users")
 
+	createUser(userRouter, us)
 	getUser(userRouter, us)
 	getUsers(userRouter, us)
 	editUser(userRouter, us)
 }
 
+func createUser(r *gin.RouterGroup, us service.UserServicer) {
+	createUserHandler := func(c *gin.Context) {
+		var req UserRequestBody
+
+		if err := c.ShouldBindJSON(&req); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"msg": err.Error()})
+			return
+		}
+
+		user := us.CreateUser(req.Name, req.Email, req.Password)
+		c.JSON(http.StatusOK, gin.H{"data": user})
+	}
+	r.POST("", createUserHandler)
+}
+
 func getUser(r *gin.RouterGroup, us service.UserServicer) {
 	getUserHandler := func(c *gin.Context) {
-		var req GetUserRequest
+		var req UserRequestParam
 
 		if err := c.ShouldBindUri(&req); err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{"msg": err.Error()})
@@ -50,8 +66,8 @@ func getUsers(r *gin.RouterGroup, us service.UserServicer) {
 
 func editUser(r *gin.RouterGroup, us service.UserServicer) {
 	editUserHandler := func(c *gin.Context) {
-		var reqId GetUserRequest
-		var reqBody EditUserRequest
+		var reqId UserRequestParam
+		var reqBody UserRequestBody
 
 		if err := c.ShouldBindUri(&reqId); err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{"msg": err.Error()})

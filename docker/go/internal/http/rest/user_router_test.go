@@ -21,9 +21,32 @@ type UserResponse[T UserResponser] struct {
 	Data T `json:"data"`
 }
 
-func TestGetUser(t *testing.T) {
+func TestCreateUser(t *testing.T) {
+	expectedUser := testdata.UserTestData[1]
+	reqDataStr := fmt.Sprintf(`{"name":"%s","email":"%s","password":"%s"}`,
+		expectedUser.Name,
+		expectedUser.Email,
+		expectedUser.Password)
 
-	t.Run("parameter is number", func(t *testing.T) {
+	reqData := strings.NewReader(reqDataStr)
+	url := fmt.Sprintf("%s/api/v1/users", baseURL)
+	res := httptest.NewRecorder()
+	req := httptest.NewRequest(http.MethodPost, url, reqData)
+
+	router.ServeHTTP(res, req)
+
+	var userResponse UserResponse[entity.User]
+	if err := json.Unmarshal(res.Body.Bytes(), &userResponse); err != nil {
+		t.Error(err)
+	}
+	user := userResponse.Data
+
+	assert.Equal(t, expectedUser.Name, user.Name)
+	assert.Equal(t, http.StatusOK, res.Code)
+}
+
+func TestGetUser(t *testing.T) {
+	t.Run("parameter is valid", func(t *testing.T) {
 		expectedUser := testdata.UserTestData[1]
 		url := fmt.Sprintf("%s/api/v1/users/%d", baseURL, expectedUser.ID)
 		res := httptest.NewRecorder()
