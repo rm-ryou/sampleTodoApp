@@ -28,6 +28,10 @@ func TestGetUser(t *testing.T) {
 		res := httptest.NewRecorder()
 		req := httptest.NewRequest(http.MethodGet, url, nil)
 
+		if err := setHeader(expectedUser.ID, req); err != nil {
+			t.Error(err)
+		}
+
 		router.ServeHTTP(res, req)
 
 		var userResponse UserResponse[entity.User]
@@ -41,9 +45,14 @@ func TestGetUser(t *testing.T) {
 	})
 
 	t.Run("parameter is not number", func(t *testing.T) {
+		user := testdata.UserTestData[1]
 		url := fmt.Sprintf("%s/api/v1/users/hoge", baseURL)
 		res := httptest.NewRecorder()
 		req := httptest.NewRequest(http.MethodGet, url, nil)
+
+		if err := setHeader(user.ID, req); err != nil {
+			t.Error(err)
+		}
 
 		router.ServeHTTP(res, req)
 
@@ -52,9 +61,14 @@ func TestGetUser(t *testing.T) {
 }
 
 func TestGetUsers(t *testing.T) {
+	user := testdata.UserTestData[1]
 	url := fmt.Sprintf("%s/api/v1/users", baseURL)
 	res := httptest.NewRecorder()
 	req := httptest.NewRequest(http.MethodGet, url, nil)
+
+	if err := setHeader(user.ID, req); err != nil {
+		t.Error(err)
+	}
 
 	router.ServeHTTP(res, req)
 
@@ -81,6 +95,10 @@ func TestEditUser(t *testing.T) {
 		res := httptest.NewRecorder()
 		req := httptest.NewRequest(http.MethodPatch, url, reqData)
 
+		if err := setHeader(subjectUser.ID, req); err != nil {
+			t.Error(err)
+		}
+
 		router.ServeHTTP(res, req)
 
 		var userResponse UserResponse[entity.User]
@@ -95,9 +113,14 @@ func TestEditUser(t *testing.T) {
 	})
 
 	t.Run("parameter is not number", func(t *testing.T) {
+		user := testdata.UserTestData[1]
 		url := fmt.Sprintf("%s/api/v1/users/hoge", baseURL)
 		res := httptest.NewRecorder()
 		req := httptest.NewRequest(http.MethodPatch, url, nil)
+
+		if err := setHeader(user.ID, req); err != nil {
+			t.Error(err)
+		}
 
 		router.ServeHTTP(res, req)
 
@@ -117,9 +140,14 @@ func TestDeleteUser(t *testing.T) {
 
 	for _, test := range tests {
 		t.Run(test.title, func(t *testing.T) {
+			user := testdata.UserTestData[1]
 			url := fmt.Sprintf("%s/api/v1/users/%s", baseURL, test.param)
 			res := httptest.NewRecorder()
 			req := httptest.NewRequest(http.MethodDelete, url, nil)
+
+			if err := setHeader(user.ID, req); err != nil {
+				t.Error(err)
+			}
 
 			router.ServeHTTP(res, req)
 

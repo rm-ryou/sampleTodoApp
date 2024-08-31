@@ -5,6 +5,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/rm-ryou/sampleTodoApp/internal/service"
+	"github.com/rm-ryou/sampleTodoApp/pkg/middleware"
 )
 
 type UserRequestParam struct {
@@ -19,6 +20,7 @@ type UserRequestBody struct {
 
 func BindUserRoutes(r *gin.Engine, us service.UserServicer) {
 	userRouter := r.Group("/api/v1/users")
+	userRouter.Use(middleware.AuthMiddleware())
 
 	getUser(userRouter, us)
 	getUsers(userRouter, us)

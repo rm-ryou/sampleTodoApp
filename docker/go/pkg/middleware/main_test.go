@@ -6,7 +6,6 @@ import (
 	"testing"
 
 	"github.com/gin-gonic/gin"
-	"github.com/rm-ryou/sampleTodoApp/internal/http/rest"
 	"github.com/rm-ryou/sampleTodoApp/pkg/auth"
 )
 
@@ -29,7 +28,7 @@ func bindAuthRoutes() {
 func TestMain(m *testing.M) {
 	gin.SetMode(gin.TestMode)
 	auth.InitializeSigningKey(signingKey)
-	router = rest.NewRouter()
+	router = gin.New()
 	bindAuthRoutes()
 
 	m.Run()
