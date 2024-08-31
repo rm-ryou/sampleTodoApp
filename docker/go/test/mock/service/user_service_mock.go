@@ -22,13 +22,13 @@ func (usm *userServiceMock) GetUsers() []entity.User {
 func (usm *userServiceMock) EditUser(id int, name, email, password string) *entity.User {
 	baseUser := testdata.UserTestData[1]
 
-	if baseUser.Name != name {
+	if name != "" {
 		baseUser.Name = name
 	}
-	if baseUser.Email != email {
+	if email != "" {
 		baseUser.Email = email
 	}
-	if baseUser.Password != password {
+	if password != "" {
 		baseUser.Password = password
 	}
 
