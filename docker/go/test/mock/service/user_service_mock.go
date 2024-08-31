@@ -11,6 +11,10 @@ func NewUserServiceMock() *userServiceMock {
 	return &userServiceMock{}
 }
 
+func (usm *userServiceMock) GetUser(id int) *entity.User {
+	return &testdata.UserTestData[1]
+}
+
 func (usm *userServiceMock) GetUsers() []entity.User {
 	return testdata.UserTestData[1:]
 }
