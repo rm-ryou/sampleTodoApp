@@ -22,7 +22,7 @@ func (asm *authServiceMock) SignIn(email, password string, isAdminResource bool)
 	if user.Admin != isAdminResource {
 		return nil, errors.New("failed to sign in")
 	}
-	return &testdata.UserResponseTestData[user.ID - 1], nil
+	return &testdata.UserResponseTestData[user.ID-1], nil
 }
 
 func getUserByEmail(email string) (*entity.User, error) {
