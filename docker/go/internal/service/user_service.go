@@ -7,6 +7,7 @@ type UserServicer interface {
 	GetUser(id int) *entity.User
 	GetUsers() []entity.User
 	EditUser(id int, name, email, password string) *entity.User
+	DeleteUser(id int) error
 }
 
 type UserService struct{}
@@ -28,5 +29,9 @@ func (us *UserService) GetUsers() []entity.User {
 }
 
 func (us *UserService) EditUser(id int, name, email, password string) *entity.User {
+	return nil
+}
+
+func (us *UserService) DeleteUser(id int) error {
 	return nil
 }

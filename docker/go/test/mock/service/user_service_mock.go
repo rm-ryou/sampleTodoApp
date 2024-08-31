@@ -38,3 +38,7 @@ func (usm *userServiceMock) EditUser(id int, name, email, password string) *enti
 
 	return &baseUser
 }
+
+func (usm *userServiceMock) DeleteUser(id int) error {
+	return nil
+}
