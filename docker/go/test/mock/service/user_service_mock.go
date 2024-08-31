@@ -11,10 +11,6 @@ func NewUserServiceMock() *userServiceMock {
 	return &userServiceMock{}
 }
 
-func (usm *userServiceMock) CreateUser(name, email, password string) (*entity.UserResponse, error) {
-	return &testdata.UserResponseTestData[1], nil
-}
-
 func (usm *userServiceMock) GetUser(id int) (*entity.UserResponse, error) {
 	return &testdata.UserResponseTestData[1], nil
 }

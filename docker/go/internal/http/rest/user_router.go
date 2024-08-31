@@ -5,6 +5,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/rm-ryou/sampleTodoApp/internal/service"
+	"github.com/rm-ryou/sampleTodoApp/pkg/middleware"
 )
 
 type UserRequestParam struct {
@@ -19,31 +20,12 @@ type UserRequestBody struct {
 
 func BindUserRoutes(r *gin.Engine, us service.UserServicer) {
 	userRouter := r.Group("/api/v1/users")
+	userRouter.Use(middleware.AuthMiddleware())
 
-	createUser(userRouter, us)
 	getUser(userRouter, us)
 	getUsers(userRouter, us)
 	editUser(userRouter, us)
 	deleteUser(userRouter, us)
-}
-
-func createUser(r *gin.RouterGroup, us service.UserServicer) {
-	createUserHandler := func(c *gin.Context) {
-		var req UserRequestBody
-
-		if err := c.ShouldBindJSON(&req); err != nil {
-			c.JSON(http.StatusBadRequest, gin.H{"msg": err.Error()})
-			return
-		}
-
-		user, err := us.CreateUser(req.Name, req.Email, req.Password)
-		if err != nil {
-			c.JSON(http.StatusBadRequest, gin.H{"msg": err.Error()})
-		}
-
-		c.JSON(http.StatusOK, gin.H{"data": user})
-	}
-	r.POST("", createUserHandler)
 }
 
 func getUser(r *gin.RouterGroup, us service.UserServicer) {
