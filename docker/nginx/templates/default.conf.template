@@ -1,0 +1,53 @@
+upstream web {
+  server ${PROXY_HOST}:${SERVER_PORT};
+}
+
+server {
+  listen        ${NGINX_PORT} default_server;
+  listen        [::]:${NGINX_PORT} default_server;
+
+  server_name   todo_sample.local;
+  # server_name   _;
+
+  location / {
+    proxy_pass http://web;
+    proxy_redirect default;
+    proxy_set_header Host $host;
+  }
+
+  location /_next/static/ {
+    alias /usr/share/nginx/html/static/;
+  }
+
+  error_page   500 502 503 504  /50x.html;
+  location = /50x.html {
+    root /usr/share/nginx/html;
+  }
+}
+
+# server {
+#   listen              ${NGINX_SSL_PORT} ssl;
+#   listen              [::]:${NGINX_SSL_PORT} ssl;
+# 
+#   server_name         todo_sample.local;
+# 
+#   ssl_certificate     /etc/nginx/certs/server.crt;
+#   ssl_certificate_key /etc/nginx/certs/server.key;
+# 
+#   location / {
+#     proxy_pass https://web;
+#     proxy_redirect default;
+#     proxy_http_version 1.1;
+#     proxy_set_header Host $host;
+#   }
+# 
+#   location ~* \.(css|js|gif|svg|png|woff|off2)$ {
+#     # /:all*()
+#       root /usr/share/nginx/html;
+#   }
+# 
+#   error_page   500 502 503 504  /50x.html;
+#   location = /50x.html {
+#       root /usr/share/nginx/html;
+#   }
+# }
