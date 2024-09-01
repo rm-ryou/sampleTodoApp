@@ -25,7 +25,14 @@ func (urm *userRepositoryMock) CreateUser(user *entity.User) error {
 }
 
 func (urm *userRepositoryMock) ReadUser(id int) (*entity.User, error) {
-	return nil, nil
+	user := testdata.UserTestData[id-1]
+	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(user.Password), 10)
+	if err != nil {
+		return nil, err
+	}
+	user.Password = string(hashedPassword)
+
+	return &user, nil
 }
 
 func (urm *userRepositoryMock) ReadUserByEmail(email string) (*entity.User, error) {
@@ -44,7 +51,7 @@ func (urm *userRepositoryMock) ReadUserByEmail(email string) (*entity.User, erro
 }
 
 func (urm *userRepositoryMock) ReadUsers() ([]entity.User, error) {
-	return nil, nil
+	return testdata.UserTestData[1:], nil
 }
 
 func (urm *userRepositoryMock) UpdateUser(user *entity.User) error {

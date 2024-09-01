@@ -9,6 +9,7 @@ import (
 
 var (
 	as         *AuthService
+	us         *UserService
 	signingKey string
 )
 
@@ -18,6 +19,7 @@ func TestMain(m *testing.M) {
 
 	ur := repository_mock.NewUserRepositoryMock()
 	as = NewAuthService(ur)
+	us = NewUserService(ur)
 
 	m.Run()
 }
