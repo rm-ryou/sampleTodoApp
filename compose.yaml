@@ -1,4 +1,14 @@
 services:
+  web:
+    build:
+      context: ./docker/nextjs
+      target: production
+    environment:
+      - NODE_ENV=production
+      - PORT=${PORT:-3000}
+      - HOSTNAME=${HOST_NAME:-0.0.0.0}
+    tty: true
+
   api:
     build:
       context: ./docker/go
