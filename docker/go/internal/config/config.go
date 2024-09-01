@@ -7,6 +7,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/rm-ryou/sampleTodoApp/internal/http/rest"
+	"github.com/rm-ryou/sampleTodoApp/pkg/auth"
 )
 
 var cacheApi *Api
@@ -20,6 +21,12 @@ func GetApi() *Api {
 }
 
 func Initialize() {
+	signingKey := os.Getenv("SIGNING_KEY")
+	if signingKey == "" {
+		log.Fatalln("signingKey is not defined")
+	}
+	auth.InitializeSigningKey(signingKey)
+
 	r := rest.NewRouter()
 
 	rest.BindRoutes(r)
@@ -30,7 +37,7 @@ func Initialize() {
 func Host() string {
 	port := os.Getenv("PORT")
 	if port == "" {
-		log.Fatalf("Port is not configured")
+		log.Fatalln("Port is not configured")
 	}
 
 	return fmt.Sprintf(":%s", port)
