@@ -1,6 +1,10 @@
 package testdata
 
-import "github.com/rm-ryou/sampleTodoApp/internal/entity"
+import (
+	"errors"
+
+	"github.com/rm-ryou/sampleTodoApp/internal/entity"
+)
 
 var UserTestData = []entity.User{
 	{
@@ -32,4 +36,17 @@ var UserResponseTestData = []entity.UserResponse{
 		Email: "user01@example.com",
 		Admin: false,
 	},
+}
+
+func GetUserByEmail(email string) (*entity.User, error) {
+	var user entity.User
+	switch email {
+	case "admin@example.com":
+		user = UserTestData[0]
+	case "user01@example.com":
+		user = UserTestData[1]
+	default:
+		return nil, errors.New("user not found")
+	}
+	return &user, nil
 }

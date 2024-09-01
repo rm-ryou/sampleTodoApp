@@ -27,7 +27,7 @@ func (asm *authServiceMock) SignUp(name, email, password string) (*entity.AuthRe
 }
 
 func (asm *authServiceMock) SignIn(email, password string, isAdminResource bool) (*entity.AuthResponse, error) {
-	user, err := getUserByEmail(email)
+	user, err := testdata.GetUserByEmail(email)
 	if err != nil {
 		return nil, err
 	}
@@ -44,17 +44,4 @@ func (asm *authServiceMock) SignIn(email, password string, isAdminResource bool)
 		Accesstoken:  token,
 	}
 	return authResponse, nil
-}
-
-func getUserByEmail(email string) (*entity.User, error) {
-	var user entity.User
-	switch email {
-	case "admin@example.com":
-		user = testdata.UserTestData[0]
-	case "user01@example.com":
-		user = testdata.UserTestData[1]
-	default:
-		return nil, errors.New("user not found")
-	}
-	return &user, nil
 }
