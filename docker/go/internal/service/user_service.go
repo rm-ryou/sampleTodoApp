@@ -1,6 +1,9 @@
 package service
 
-import "github.com/rm-ryou/sampleTodoApp/internal/entity"
+import (
+	"github.com/rm-ryou/sampleTodoApp/internal/entity"
+	"github.com/rm-ryou/sampleTodoApp/internal/storage/mysql/repository"
+)
 
 type UserServicer interface {
 	GetUser(id int) (*entity.UserResponse, error)
@@ -9,10 +12,12 @@ type UserServicer interface {
 	DeleteUser(id int) error
 }
 
-type UserService struct{}
+type UserService struct {
+	r repository.IUserRepository
+}
 
-func NewUserService() *UserService {
-	return &UserService{}
+func NewUserService(r repository.IUserRepository) *UserService {
+	return &UserService{r}
 }
 
 func (us *UserService) GetUser(id int) (*entity.UserResponse, error) {
