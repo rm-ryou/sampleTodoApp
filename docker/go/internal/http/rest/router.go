@@ -1,6 +1,8 @@
 package rest
 
 import (
+	"database/sql"
+
 	"github.com/gin-gonic/gin"
 	"github.com/rm-ryou/sampleTodoApp/internal/service"
 	"github.com/rm-ryou/sampleTodoApp/internal/storage/mysql/repository"
@@ -13,8 +15,8 @@ func NewRouter() *gin.Engine {
 	return r
 }
 
-func BindRoutes(r *gin.Engine) {
-	ur := repository.NewUserRepository()
+func BindRoutes(r *gin.Engine, db *sql.DB) {
+	ur := repository.NewUserRepository(db)
 	us := service.NewUserService(ur)
 	as := service.NewAuthService(ur)
 

@@ -3,9 +3,32 @@ services:
     build:
       context: ./docker/go
       target: production
+    depends_on:
+      mysql:
+        condition: service_started
+        required: false
     environment:
       - PORT=${API_PORT:-3100}
       - SIGNING_KEY=${SIGNING_KEY:-AllYourBase}
+      - DB_DRIVER=mysql
+      - DB_HOST=mysql
+      - DB_PORT=3306
+      - DB_USER=${MYSQL_USER:-user}
+      - DB_PASSWORD=${MYSQL_PASSWORD:-password}
+      - DB_NAME=${MYSQL_DATABASE:-sample_todo_app}
     tty: true
     ports:
       - ${API_PORT}:${API_PORT}
+
+  mysql:
+    image: mysql:8.0
+    environment:
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD:-root}
+      - MYSQL_DATABASE=${MYSQL_DATABASE:-todo_app}
+      - MYSQL_USER=${MYSQL_USER:-user}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD:-password}
+    volumes:
+      - db:/var/lib/mysql
+
+volumes:
+  db: {}

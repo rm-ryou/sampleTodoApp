@@ -1,5 +1,5 @@
 ###----- Builder -----###
-FROM golang:1.21 AS builder
+FROM golang:1.22 AS builder
 
 WORKDIR /app
 
@@ -16,6 +16,7 @@ WORKDIR /app
 ENV GIN_MODE=release
 
 COPY --from=builder /app/main /app/server
+COPY ./internal/storage/mysql/migrations /migrations
 
 EXPOSE ${PORT}
 
