@@ -16,9 +16,14 @@ down:
 .PHONY: re
 re: down run
 
+.PHONY: mysql
+mysql: up
+	docker compose exec mysql mysql -u user -p
+
 .PHONY: test
 test: _test_api
 
 .PHONY: _test_api
 _test_api:
 	@cd docker/go; go test -v ./...
+
