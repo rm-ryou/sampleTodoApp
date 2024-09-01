@@ -13,9 +13,10 @@ type UserRequestParam struct {
 }
 
 type UserRequestBody struct {
-	Name     string `json:"name"`
-	Email    string `json:"email"`
-	Password string `json:"password"`
+	Name        string `json:"name"`
+	Email       string `json:"email"`
+	Password    string `json:"password"`
+	NewPassword string `json:"new_password"`
 }
 
 func BindUserRoutes(r *gin.Engine, us service.UserServicer) {
@@ -74,7 +75,7 @@ func editUser(r *gin.RouterGroup, us service.UserServicer) {
 			return
 		}
 
-		user, err := us.EditUser(reqId.ID, reqBody.Name, reqBody.Email, reqBody.Password)
+		user, err := us.EditUser(reqId.ID, reqBody.Password, reqBody.Name, reqBody.Email, reqBody.NewPassword)
 		if err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{"msg": err.Error()})
 		}
