@@ -16,6 +16,7 @@ WORKDIR /app
 ENV GIN_MODE=release
 
 COPY --from=builder /app/main /app/server
+COPY ./internal/storage/mysql/migrations /migrations
 
 EXPOSE ${PORT}
 
