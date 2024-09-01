@@ -15,19 +15,19 @@ func NewAuthServiceMock() *authServiceMock {
 	return &authServiceMock{}
 }
 
-func (asm *authServiceMock) SignUp(name, email, password string) (*entity.AuthResponse, error) {
-	user := testdata.UserResponseTestData[1]
+func (asm *authServiceMock) SignUp(name, email, password string) (*entity.Auth, error) {
+	user := testdata.UserTestData[1]
 	token, _ := auth.GenerateToken(user.ID, utils.RealTime{})
 
-	authResponse := &entity.AuthResponse{
-		UserResponse: user,
-		Accesstoken:  token,
+	auth := &entity.Auth{
+		User:        user,
+		Accesstoken: token,
 	}
-	return authResponse, nil
+	return auth, nil
 }
 
-func (asm *authServiceMock) SignIn(email, password string, isAdminResource bool) (*entity.AuthResponse, error) {
-	user, err := getUserByEmail(email)
+func (asm *authServiceMock) SignIn(email, password string, isAdminResource bool) (*entity.Auth, error) {
+	user, err := testdata.GetUserByEmail(email)
 	if err != nil {
 		return nil, err
 	}
@@ -36,25 +36,11 @@ func (asm *authServiceMock) SignIn(email, password string, isAdminResource bool)
 		return nil, errors.New("failed to sign in")
 	}
 
-	userResponse := &testdata.UserResponseTestData[user.ID-1]
-	token, _ := auth.GenerateToken(userResponse.ID, utils.RealTime{})
+	token, _ := auth.GenerateToken(user.ID, utils.RealTime{})
 
-	authResponse := &entity.AuthResponse{
-		UserResponse: *userResponse,
-		Accesstoken:  token,
+	auth := &entity.Auth{
+		User:        *user,
+		Accesstoken: token,
 	}
-	return authResponse, nil
-}
-
-func getUserByEmail(email string) (*entity.User, error) {
-	var user entity.User
-	switch email {
-	case "admin@example.com":
-		user = testdata.UserTestData[0]
-	case "user01@example.com":
-		user = testdata.UserTestData[1]
-	default:
-		return nil, errors.New("user not found")
-	}
-	return &user, nil
+	return auth, nil
 }
