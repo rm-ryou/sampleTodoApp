@@ -23,7 +23,7 @@ func NewAuthService(r repository.IUserRepository) *AuthService {
 	return &AuthService{r}
 }
 
-func attachToken(user *entity.User) (*entity.Auth, error) {
+func setToken(user *entity.User) (*entity.Auth, error) {
 	token, err := auth.GenerateToken(user.ID, utils.RealTime{})
 	if err != nil {
 		return nil, err
@@ -51,9 +51,26 @@ func (as *AuthService) SignUp(name, email, password string) (*entity.Auth, error
 		return nil, err
 	}
 
-	return attachToken(user)
+	return setToken(user)
 }
 
 func (as *AuthService) SignIn(email, password string, isAdminResource bool) (*entity.Auth, error) {
-	return nil, nil
+	if email == "" || password == "" {
+		return nil, errors.New("invalid params")
+	}
+
+	user, err := as.r.GetUserByEmail(email)
+	if err != nil {
+		return nil, err
+	}
+
+	if user.Admin != isAdminResource {
+		return nil, errors.New("failed to sign in")
+	}
+
+	if err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password)); err != nil {
+		return nil, err
+	}
+
+	return setToken(user)
 }
