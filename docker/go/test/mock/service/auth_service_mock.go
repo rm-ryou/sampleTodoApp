@@ -20,8 +20,8 @@ func (asm *authServiceMock) SignUp(name, email, password string) (*entity.Auth, 
 	token, _ := auth.GenerateToken(user.ID, utils.RealTime{})
 
 	auth := &entity.Auth{
-		User: user,
-		Accesstoken:  token,
+		User:        user,
+		Accesstoken: token,
 	}
 	return auth, nil
 }
@@ -39,8 +39,8 @@ func (asm *authServiceMock) SignIn(email, password string, isAdminResource bool)
 	token, _ := auth.GenerateToken(user.ID, utils.RealTime{})
 
 	auth := &entity.Auth{
-		User: *user,
-		Accesstoken:  token,
+		User:        *user,
+		Accesstoken: token,
 	}
 	return auth, nil
 }
