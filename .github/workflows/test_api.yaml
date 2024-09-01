@@ -8,12 +8,18 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
+    services:
+      dind:
+        image: docker:23.0-rc-dind-rootless
+        ports:
+          - 2375:2375
+
     steps:
       - uses: actions/checkout@v4
-      - name: Setup go1.21.6
+      - name: Setup go1.22.6
         uses: actions/setup-go@v5
         with:
-          go-version: 1.21.6
+          go-version: 1.22.6
 
       - name: Run api test
         run: make test
