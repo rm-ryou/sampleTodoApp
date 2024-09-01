@@ -11,16 +11,16 @@ func NewUserServiceMock() *userServiceMock {
 	return &userServiceMock{}
 }
 
-func (usm *userServiceMock) GetUser(id int) (*entity.UserResponse, error) {
-	return &testdata.UserResponseTestData[1], nil
+func (usm *userServiceMock) GetUser(id int) (*entity.User, error) {
+	return &testdata.UserTestData[1], nil
 }
 
-func (usm *userServiceMock) GetUsers() ([]entity.UserResponse, error) {
-	return testdata.UserResponseTestData[1:], nil
+func (usm *userServiceMock) GetUsers() ([]entity.User, error) {
+	return testdata.UserTestData[1:], nil
 }
 
-func (usm *userServiceMock) EditUser(id int, name, email, password string) (*entity.UserResponse, error) {
-	baseUser := testdata.UserResponseTestData[1]
+func (usm *userServiceMock) EditUser(id int, password, name, email, Newpassword string) (*entity.User, error) {
+	baseUser := testdata.UserTestData[1]
 
 	if name != "" {
 		baseUser.Name = name

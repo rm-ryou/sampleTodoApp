@@ -12,19 +12,30 @@ func NewUserRepositoryMock() *userRepositoryMock {
 	return &userRepositoryMock{}
 }
 
-func (urm *userRepositoryMock) CreateUser(user *entity.User) (*entity.User, error) {
+func (urm *userRepositoryMock) CreateUser(user *entity.User) error {
 	tmpHashedPassword := user.Password
 
 	savedUser, err := testdata.GetUserByEmail(user.Email)
 	if err != nil {
-		return nil, err
+		return err
 	}
 	savedUser.Password = tmpHashedPassword
 
-	return savedUser, nil
+	return nil
 }
 
-func (urm *userRepositoryMock) GetUserByEmail(email string) (*entity.User, error) {
+func (urm *userRepositoryMock) ReadUser(id int) (*entity.User, error) {
+	user := testdata.UserTestData[id-1]
+	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(user.Password), 10)
+	if err != nil {
+		return nil, err
+	}
+	user.Password = string(hashedPassword)
+
+	return &user, nil
+}
+
+func (urm *userRepositoryMock) ReadUserByEmail(email string) (*entity.User, error) {
 	user, err := testdata.GetUserByEmail(email)
 	if err != nil {
 		return nil, err
@@ -37,4 +48,16 @@ func (urm *userRepositoryMock) GetUserByEmail(email string) (*entity.User, error
 	user.Password = string(hashedPassword)
 
 	return user, nil
+}
+
+func (urm *userRepositoryMock) ReadUsers() ([]entity.User, error) {
+	return testdata.UserTestData[1:], nil
+}
+
+func (urm *userRepositoryMock) UpdateUser(user *entity.User) error {
+	return nil
+}
+
+func (urm *userRepositoryMock) DeleteUser(id int) error {
+	return nil
 }

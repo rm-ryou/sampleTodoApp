@@ -37,16 +37,20 @@ func (as *AuthService) SignUp(name, email, password string) (*entity.Auth, error
 		return nil, errors.New("invalid params")
 	}
 
-	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(password), 10)
+	hashed, err := EncryptPassword(password)
 	if err != nil {
 		return nil, err
 	}
 
-	user, err := as.r.CreateUser(&entity.User{
+	if err := as.r.CreateUser(&entity.User{
 		Name:     name,
 		Email:    email,
-		Password: string(hashedPassword),
-	})
+		Password: hashed,
+	}); err != nil {
+		return nil, err
+	}
+
+	user, err := as.r.ReadUserByEmail(email)
 	if err != nil {
 		return nil, err
 	}
@@ -59,7 +63,7 @@ func (as *AuthService) SignIn(email, password string, isAdminResource bool) (*en
 		return nil, errors.New("invalid params")
 	}
 
-	user, err := as.r.GetUserByEmail(email)
+	user, err := as.r.ReadUserByEmail(email)
 	if err != nil {
 		return nil, err
 	}
