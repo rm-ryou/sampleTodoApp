@@ -1,4 +1,7 @@
 {
+  "env": {
+    "jest/globals": true
+  },
   "extends": [
     "next",
     "next/core-web-vitals",
@@ -18,8 +21,6 @@
       {
         "trailingComma": "all",
         "endOfLine": "lf",
-        "semi": false,
-        "singleQuote": true,
         "printWidth": 80,
         "tabWidth": 2
       }
@@ -32,6 +33,9 @@
         "react/prop-types": "off"
       }
     }
+  ],
+  "plugins": [
+    "jest"
   ],
   "ignorePatterns": ["*.config.*"]
 }
