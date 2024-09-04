@@ -21,9 +21,13 @@ mysql: up
 	docker compose exec mysql mysql -u user -p
 
 .PHONY: test
-test: _test_api
+test: _test_api _test_front
 
 .PHONY: _test_api
 _test_api:
 	@cd docker/go; go test -v ./...
+
+.PHONY: _test_front
+_test_front:
+	@cd docker/nextjs; npm test
 
