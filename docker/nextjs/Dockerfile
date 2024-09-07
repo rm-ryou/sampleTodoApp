@@ -35,7 +35,8 @@ RUN mkdir .next && \
 
 COPY --from=builder --chown=${USERNAME}:${GROUPNAME} /app/public ./public
 COPY --from=builder --chown=${USERNAME}:${GROUPNAME} /app/.next/standalone ./
-COPY --from=builder --chown=${USERNAME}:${GROUPNAME} /app/.next/static /static
+COPY --from=builder --chown=${USERNAME}:${GROUPNAME} /app/.next/static ./.next/static
+# COPY --from=builder --chown=${USERNAME}:${GROUPNAME} /app/.next/static /static
 
 USER next
 
